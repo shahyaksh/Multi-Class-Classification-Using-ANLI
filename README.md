@@ -45,7 +45,7 @@ gcloud services enable containerregistry.googleapis.com
 ### 3. Deploy Using the Script
 
 ```bash
-cd deployment/cloud-run
+cd backend
 ./deploy.sh
 ```
 
@@ -131,6 +131,8 @@ If you prefer to deploy manually:
 ### Build the Image
 
 ```bash
+cd backend
+
 export PROJECT_ID="your-project-id"
 export WANDB_API_KEY="your-wandb-api-key"
 
@@ -251,9 +253,11 @@ gcloud run services logs read deberta-anli-nli --region us-east1 --limit 50
 
 ### Update Deployment
 
-After making changes to `main.py`:
+After making changes to `backend/main.py`:
 
 ```bash
+cd backend
+
 # Rebuild
 gcloud builds submit --config=cloudbuild.yaml \
   --substitutions=_WANDB_API_KEY=$WANDB_API_KEY
@@ -324,15 +328,48 @@ gcloud container images delete gcr.io/$PROJECT_ID/deberta-anli-nli
 
 ---
 
-## Files Overview
+## Project Structure
 
-- `main.py` - FastAPI application
-- `Dockerfile` - Container configuration
-- `download_model.py` - W&B model download script
-- `cloudbuild.yaml` - Cloud Build configuration
-- `deploy.sh` - Automated deployment script
-- `requirements.txt` - Python dependencies
-- `test_api.py` - API testing script
+```
+Multi-Class-Classification-Using-ANLI/
+├── backend/                                    # Cloud Run deployment files
+│   ├── main.py                                # FastAPI application
+│   ├── Dockerfile                             # Container configuration
+│   ├── download_model.py                      # W&B model download script
+│   ├── cloudbuild.yaml                        # Cloud Build configuration
+│   ├── deploy.sh                              # Automated deployment script
+│   └── test_api.py                            # API testing script
+├── app.py                                      # Streamlit web interface
+├── multi-class-classification-on-anli-dataset.ipynb  # Training notebook
+├── Experiment_Documentation.pdf                # Research paper and experimental results
+├── requirements.txt                            # Streamlit app dependencies
+├── .env                                        # Environment variables (not in git)
+├── .gitignore                                  # Git ignore rules
+├── LICENSE                                     # Apache 2.0 License
+└── README.md                                   # This file
+```
+
+### Key Files
+
+**Frontend:**
+- `app.py` - Streamlit web interface for model predictions
+- `requirements.txt` - Dependencies for Streamlit app (streamlit, requests, python-dotenv)
+
+**Backend (Cloud Run):**
+- `backend/main.py` - FastAPI REST API for model inference
+- `backend/Dockerfile` - Multi-stage Docker build for optimized deployment
+- `backend/download_model.py` - Downloads fine-tuned model from W&B
+- `backend/cloudbuild.yaml` - Google Cloud Build configuration
+- `backend/deploy.sh` - Automated deployment script with prompts
+- `backend/test_api.py` - API endpoint testing utilities
+
+**Training & Documentation:**
+- `multi-class-classification-on-anli-dataset.ipynb` - Complete training pipeline with LoRA fine-tuning
+- `Experiment_Documentation.pdf` - Research paper and experimental results
+
+**Configuration:**
+- `.env` - Environment variables (W&B credentials, API URL)
+- `.gitignore` - Excludes model files, credentials, and build artifacts
 
 ---
 
