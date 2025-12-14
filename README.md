@@ -2,6 +2,14 @@
 
 Deploy your fine-tuned DeBERTa ANLI model to Google Cloud Run.
 
+## 🚀 Live Demo
+
+**Try the deployed Streamlit app**: [https://multi-class-classification-using-anli.streamlit.app/](https://multi-class-classification-using-anli.streamlit.app/)
+
+Test the NLI model directly in your browser without any setup!
+
+---
+
 ## Prerequisites
 
 1. **Google Cloud Account** with billing enabled
@@ -49,6 +57,72 @@ The script will prompt you for:
 **Deployment time**: ~12-15 minutes (first time), ~5-7 minutes (subsequent)
 
 ---
+
+## Running the Streamlit App
+
+The project includes a user-friendly Streamlit web interface for interacting with the deployed model.
+
+### 1. Install Dependencies
+
+```bash
+pip install streamlit requests python-dotenv
+```
+
+### 2. Configure Environment Variables
+
+Create a `.env` file in the project root with the following variables:
+
+```bash
+# Weights & Biases Configuration (for model download/training)
+WANDB_API_KEY=your-wandb-api-key
+WANDB_ENTITY=your-wandb-entity
+WANDB_PROJECT=your-wandb-project-name
+WANDB_ARTIFACT=deberta-base-lora-r16-r2:latest
+
+# API Configuration (for Streamlit app)
+API_URL=https://your-service-name-xxxxx.region.run.app
+```
+
+**How to get these values:**
+
+- **WANDB_API_KEY**: Get from https://wandb.ai/authorize
+- **WANDB_ENTITY**: Your W&B username or team name
+- **WANDB_PROJECT**: Your W&B project name
+- **WANDB_ARTIFACT**: Model artifact name (default: `deberta-base-lora-r16-r2:latest`)
+- **API_URL**: Your Cloud Run service URL (obtained after deployment)
+
+**Example `.env` file:**
+
+```bash
+WANDB_API_KEY=your_wandb_api_key_here
+WANDB_ENTITY=your-wandb-username
+WANDB_PROJECT=your-project-name
+WANDB_ARTIFACT=deberta-base-lora-r16-r2:latest
+API_URL=https://your-service-name-xxxxx.region.run.app
+```
+
+### 3. Launch the App
+
+```bash
+streamlit run app.py
+```
+
+The app will open automatically in your browser at `http://localhost:8501`
+
+### Features
+
+- **Interactive UI**: Enter premise and hypothesis statements
+- **Real-time Predictions**: Get instant NLI predictions (Entailment, Neutral, Contradiction)
+- **Confidence Scores**: View probability breakdown for all three classes
+- **Visual Analytics**: Bar charts showing prediction probabilities
+- **Examples**: Built-in examples to get started quickly
+
+### Usage
+
+1. Enter a **premise** statement (the base fact)
+2. Enter a **hypothesis** statement (the claim to verify)
+3. Click **"🚀 Predict Relationship"**
+4. View the prediction with confidence scores and probability breakdown
 
 ## Manual Deployment
 

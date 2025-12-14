@@ -13,7 +13,7 @@ API_URL = os.getenv("API_URL", "https://your-api-url.run.app")
 # Page config
 st.set_page_config(
     page_title="ANLI NLI Predictor",
-    page_icon="🔍",
+    page_icon="�",
     layout="centered"
 )
 
@@ -52,7 +52,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Title and description
-st.title("🔍 Natural Language Inference Predictor")
+st.title("Natural Language Inference Predictor")
 st.markdown("""
 Determine the relationship between two statements using a fine-tuned **DeBERTa-v3-base** model.
 
@@ -65,7 +65,7 @@ st.divider()
 col1, col2 = st.columns([1, 1])
 
 with col1:
-    st.subheader("📝 Premise")
+    st.subheader("Premise")
     premise = st.text_area(
         "Enter the premise statement:",
         placeholder="e.g., A person is walking a dog in the park",
@@ -74,7 +74,7 @@ with col1:
     )
 
 with col2:
-    st.subheader("❓ Hypothesis")
+    st.subheader("Hypothesis")
     hypothesis = st.text_area(
         "Enter the hypothesis statement:",
         placeholder="e.g., A person is outside",
@@ -83,10 +83,10 @@ with col2:
     )
 
 # Predict button
-predict_button = st.button("🚀 Predict Relationship", use_container_width=True)
+predict_button = st.button("Predict Relationship", use_container_width=True)
 
 # Examples section
-with st.expander("💡 See Examples"):
+with st.expander("See Examples"):
     st.markdown("""
     **Example 1: Entailment**
     - Premise: "A person is walking a dog in the park"
@@ -104,9 +104,9 @@ with st.expander("💡 See Examples"):
 # Prediction logic
 if predict_button:
     if not premise or not hypothesis:
-        st.error("⚠️ Please enter both premise and hypothesis!")
+        st.error("Please enter both premise and hypothesis.")
     else:
-        with st.spinner("🔄 Analyzing..."):
+        with st.spinner("Analyzing..."):
             try:
                 # Call API
                 response = requests.post(
@@ -125,7 +125,7 @@ if predict_button:
                     probabilities = result["probabilities"]
                     
                     # Display result
-                    st.success("✅ Prediction Complete!")
+                    st.success("Prediction Complete")
                     
                     # Prediction box with color coding
                     box_class = prediction.lower()
@@ -139,7 +139,7 @@ if predict_button:
                     """, unsafe_allow_html=True)
                     
                     # Probability breakdown
-                    st.subheader("📊 Probability Breakdown")
+                    st.subheader("Probability Breakdown")
                     
                     col1, col2, col3 = st.columns(3)
                     
@@ -172,15 +172,15 @@ if predict_button:
                     })
                     
                 else:
-                    st.error(f"❌ API Error: {response.status_code}")
+                    st.error(f"API Error: {response.status_code}")
                     st.json(response.json())
                     
             except requests.exceptions.Timeout:
-                st.error("⏱️ Request timed out. Please try again.")
+                st.error("Request timed out. Please try again.")
             except requests.exceptions.ConnectionError:
-                st.error("🔌 Could not connect to API. Please check your internet connection.")
+                st.error("Could not connect to API. Please check your internet connection.")
             except Exception as e:
-                st.error(f"❌ Error: {str(e)}")
+                st.error(f"Error: {str(e)}")
 
 # Footer
 st.divider()
