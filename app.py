@@ -59,6 +59,11 @@ Determine the relationship between two statements using a fine-tuned **DeBERTa-v
 **Model Performance**: 50.3% accuracy on ANLI R2 test set
 """)
 
+st.info("""
+**Note**: The first request may take 30-60 seconds as the Cloud Run API wakes up from idle state. 
+Subsequent requests will be much faster. If the request times out, please try again.
+""")
+
 st.divider()
 
 # Input section
