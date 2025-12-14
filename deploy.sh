@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Google Cloud Run Deployment Script for ANLI NLI Model
-# This script deploys the model with W&B artifact loading
-
 set -e  # Exit on error
 
 echo "=========================================="

@@ -87,7 +87,7 @@ gcloud run deploy deberta-anli-nli \
 After deployment, you'll get a service URL. Test it:
 
 ```bash
-export SERVICE_URL="https://deberta-anli-nli-66725207998.us-east1.run.app"
+export SERVICE_URL="https://your-service-name-xxxxx.region.run.app"
 
 # Health check
 curl $SERVICE_URL/health
@@ -119,7 +119,7 @@ curl -X POST $SERVICE_URL/predict \
 ```python
 import requests
 
-SERVICE_URL = "https://deberta-anli-nli-66725207998.us-east1.run.app"
+SERVICE_URL = "https://your-service-name-xxxxx.region.run.app"
 
 response = requests.post(
     f"{SERVICE_URL}/predict",
@@ -271,9 +271,9 @@ For issues:
 
 ---
 
-## Live Deployment
+## Deployment Info
 
-**Current deployment**: https://deberta-anli-nli-66725207998.us-east1.run.app
+**Service URL**: After deployment, you'll receive a URL like `https://your-service-name-xxxxx.region.run.app`
 
 - Model: DeBERTa-v3-base + LoRA (r=16)
 - Dataset: ANLI R2
