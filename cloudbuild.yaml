@@ -1,0 +1,11 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '--build-arg'
+      - 'WANDB_API_KEY=${_WANDB_API_KEY}'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/deberta-anli-nli'
+      - '.'
+images:
+  - 'gcr.io/$PROJECT_ID/deberta-anli-nli'
