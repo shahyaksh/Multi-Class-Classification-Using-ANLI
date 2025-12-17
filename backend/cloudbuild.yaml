@@ -4,6 +4,8 @@ steps:
       - 'build'
       - '--build-arg'
       - 'WANDB_API_KEY=${_WANDB_API_KEY}'
+      - '--build-arg'
+      - 'HF_TOKEN=${_HF_TOKEN}'
       - '-t'
       - 'gcr.io/$PROJECT_ID/deberta-anli-nli'
       - '.'

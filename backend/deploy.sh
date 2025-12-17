@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Google Cloud Run Deployment Script for ANLI NLI Model
+# This script deploys the model with W&B artifact loading
+
 set -e  # Exit on error
 
 echo "=========================================="
@@ -17,6 +20,7 @@ fi
 # Get configuration
 read -p "Enter your Google Cloud Project ID: " PROJECT_ID
 read -p "Enter your W&B API key: " WANDB_API_KEY
+read -p "Enter your HuggingFace token: " HF_TOKEN
 read -p "Enter region (default: us-central1): " REGION
 REGION=${REGION:-us-central1}
 
@@ -30,6 +34,7 @@ echo "  Project ID: $PROJECT_ID"
 echo "  Region: $REGION"
 echo "  Image: gcr.io/$PROJECT_ID/$IMAGE_NAME"
 echo "  W&B API Key: ${WANDB_API_KEY:0:10}..."
+echo "  HF Token: ${HF_TOKEN:0:10}..."
 echo ""
 
 read -p "Continue with deployment? (y/n) " -n 1 -r
@@ -55,7 +60,7 @@ gcloud services enable containerregistry.googleapis.com
 echo ""
 echo "Step 3: Building Docker image with model..."
 gcloud builds submit --config=cloudbuild.yaml \
-  --substitutions=_WANDB_API_KEY=$WANDB_API_KEY
+  --substitutions=_WANDB_API_KEY=$WANDB_API_KEY,_HF_TOKEN=$HF_TOKEN
 
 # Deploy to Cloud Run
 echo ""
@@ -67,10 +72,11 @@ gcloud run deploy $SERVICE_NAME \
   --allow-unauthenticated \
   --memory 4Gi \
   --cpu 4 \
-  --timeout 300 \
+  --timeout 600 \
   --max-instances 10 \
   --min-instances 0 \
-  --concurrency 10
+  --concurrency 10 \
+  --cpu-boost
 
 # Get service URL
 echo ""

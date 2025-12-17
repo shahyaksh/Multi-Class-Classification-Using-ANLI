@@ -67,28 +67,42 @@ class BatchPredictionRequest(BaseModel):
 
 @app.on_event("startup")
 async def load_model():
-    """Load model and tokenizer from local directory (downloaded during build)"""
+    """Load base model and LoRA adapter from local directories (downloaded during build)"""
     global model, tokenizer, device
     
     logger.info("Loading model from local directory...")
     
     try:
+        from peft import PeftModel
+        
         # Determine device
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         logger.info(f"Using device: {device}")
         
-
-        model_dir = "./model"
+        base_model_dir = "./base_model"
+        lora_adapter_dir = "./lora_adapter"
         
-        logger.info(f"Loading from: {model_dir}")
+        logger.info(f"Loading base model from: {base_model_dir}")
+        logger.info(f"Loading LoRA adapter from: {lora_adapter_dir}")
         
-     
-        tokenizer = AutoTokenizer.from_pretrained(model_dir)
-        model = AutoModelForSequenceClassification.from_pretrained(model_dir, num_labels=3)
+        # Load tokenizer from base model
+        tokenizer = AutoTokenizer.from_pretrained(base_model_dir)
+        
+        # Load base model
+        base_model = AutoModelForSequenceClassification.from_pretrained(
+            base_model_dir,
+            num_labels=3
+        )
+        
+        # Load and merge LoRA adapter
+        logger.info("Merging LoRA adapter with base model...")
+        model = PeftModel.from_pretrained(base_model, lora_adapter_dir)
+        model = model.merge_and_unload()  # Merge LoRA weights into base model
+        
         model.to(device)
         model.eval()
         
-        logger.info("Model loaded successfully!")
+        logger.info("Model loaded and LoRA adapter merged successfully!")
         
     except Exception as e:
         logger.error(f"Error loading model: {e}")

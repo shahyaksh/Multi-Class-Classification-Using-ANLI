@@ -18,9 +18,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy download script
 COPY download_model.py .
 
-# Download model during build (requires WANDB_API_KEY as build arg)
+# Download model during build (requires WANDB_API_KEY and HF_TOKEN as build args)
 ARG WANDB_API_KEY
+ARG HF_TOKEN
 ENV WANDB_API_KEY=$WANDB_API_KEY
+ENV HF_TOKEN=$HF_TOKEN
 
 RUN python download_model.py && rm download_model.py
 
@@ -35,7 +37,7 @@ ENV PORT=8080
 ENV PYTHONUNBUFFERED=1
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=10s --start-period=120s --retries=3 \
     CMD curl -f http://localhost:8080/health || exit 1
 
 # Run the application
