@@ -2,14 +2,8 @@ import streamlit as st
 import requests
 import json
 import os
-from dotenv import load_dotenv
 
-# Load environment variables
-load_dotenv()
-
-# API Configuration
-API_URL = os.getenv("API_URL", "https://your-api-url.run.app")
-
+API_URL = st.secrets.get("API_URL", "https://your-api-url.run.app")
 # Page config
 st.set_page_config(
     page_title="ANLI NLI Predictor",
